@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <script src="../node_modules/web-animations-js/web-animations-next.min.js"></script>
+    <script type="module">
+          import '@polymer/paper-button/paper-button.js';
+          import '@polymer/paper-input/paper-input.js';
+          import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+          import '@polymer/paper-item/paper-item.js';
+          import '@polymer/paper-listbox/paper-listbox.js';
+          import '@polymer/iron-form/iron-form.js';
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+
+    <title>Don't Waste Food</title>
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+    <link href='/main-css.css' rel='stylesheet'>
+
+
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script type="module" src="/src/pwatutorial-app/toolbar-drawer.js" crossorigin></script>
+    <script type="module" src="/src/pwatutorial-app/accordion.js" crossorigin></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="../config.js"></script>
+
+        <script>
+            function googleSignIn(){
+
+            base_provider = new firebase.auth.GoogleAuthProvider()
+            firebase.auth().signInWithPopup(base_provider).then(function(result){
+
+                console.log("Success ! Google Account Linked")
+                var user = result.user
+                uid = user.uid;
+                // guys, we need this localStorage for our form in app. don't delete, please. Our Erasmus team =)
+                localStorage.setItem('userLogin', uid);
+
+                var commentsRef = firebase.database().ref('/UserIDS/');
+
+                commentsRef.child(uid).once('value', function (snapshot) {
+                    if (snapshot.exists()) {
+
+                        //if user already has an account then redirect him to main screen immediately
+
+                        var commentsRef2 = firebase.database().ref('/UserIDS/' + uid + '/type');
+
+                        commentsRef2.on('value', function(snapshot) {
+                          //  var TYPE = snapshot.val();
+                           // window.alert(TYPE);
+
+                            /*  // commented by Kurt - to take the user to the common dashboard instead of NGO or restaurant screen
+                            if(TYPE == 'NGO'){
+
+                                //take user to NGO screen
+                                console.log(snapshot.val());
+                            }else if(TYPE == 'Restaurant'){
+
+                                //take user to Restaurant screen
+                                console.log(snapshot.val());
+                            }
+                             */
+
+                             window:location.href = "dashboard.html"
+                        });
+                        
+                    }else{
+
+                        //if user does not have an account, take him to the page below to create a new one
+
+                        window:location.href = "CreateAccount.html"
+
+                    }
+                });
+
+            }).catch(function(err){
+
+                console.log(err)
+            })
+        }
+
+            function toDashboard(){
+                window.location.href = "dashboard.html";
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <!-- <my-toolbar-drawer module="Donating"></my-toolbar-drawer> -->
+        <div id="content">
+            <h1>Sign up / Login</h1>
+            <hr>
+
+            <button id="guestBtn" class="customBtn" onclick="toDashboard()">Continue as a guest</button>
+            <br>
+            <button id="googleBtn" class="customBtn" onclick="googleSignIn()">Sign up with Google</button>
+
+            <br>
+            <h5 style="text-align:center">Kindly login to use the Donating and Reselling Features</h5>
+            <br>
+            <p style="text-align:center">You have to be a restaurant or supermarket owner or an NGO to be able to use the above features</p>
+        </div>
+
+    </body>
+</html>

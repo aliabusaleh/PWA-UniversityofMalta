@@ -1,0 +1,66 @@
+<html>
+    <head>
+            <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+            <script src="scripts.js"></script>
+            <script src="db_queries.js"></script>
+            <script>
+            // Initialize Firebase
+            var config = {
+            apiKey: "AIzaSyASzOSAyMPZCE0_dTivtSZs_T63pckhvLE",
+            authDomain: "food-waste-app-44556.firebaseapp.com",
+            databaseURL: "https://food-waste-app-44556.firebaseio.com",
+            projectId: "food-waste-app-44556",
+            storageBucket: "food-waste-app-44556.appspot.com",
+            messagingSenderId: "169746991420"
+            };
+            firebase.initializeApp(config);
+            </script>
+    </head>
+        
+    <body> 
+        <h1>Firbase Demo</h1>
+        <img src="firebase.png" alt="Firebase Logo"style="width:500px;">
+        <br/>
+        <h2> Writing to the database </h2>    
+
+        <button type="button" onclick="writeUserData(21222223, 'test@gmail.com', '24, Heaven', 'School Street', 'Marsa', 'MRS2222', 'TRUE', '')">User</button>
+
+        <button type="button" onclick="writeBuysData(23, 'loc2', 'ofId2', 'sell2', 'buy2', 'pp2', 'price', 'time2', 'uId2')">Buys</button>
+
+        <button type="button" onclick="writeDonationsData(2, '31/11/2018', '2', '13:00')">Donations</button>  
+
+        <button type="button" onclick="writeOffersData(1, 'Amount', 'Description', 'expDate', 'name', 'ownId', 'position', 'price', 'prodId', 'visTo')">Offers</button>  
+
+        <button type="button" onclick="writeProductsData(1, 'Apple', '223332562')">Products</button>  
+        <hr>
+        <h2> Deleting from the database </h2> 
+        
+        <h5>Will delete the house number only from deleteTest</h5>
+        <button type="button" onclick="deleteData()">Delete Specific</button>  
+        
+        <h5>Will delete all the data from deleteTest</h5>
+        <button type="button" onclick="deleteAllData()">Delete Parent</button>
+        <hr>
+        <h2> Updating the database </h2> 
+        <h5>This will update a specific child from UpdateTest</h5>
+        <button type="button" onclick="updateData()">Update</button>
+        <hr>
+        <h2> Reading from the database </h2> 
+        <button type="button" onclick="readUsersOnce(21222222)">Users</button>
+        <button type="button" onclick="readBuysOnce(22)">Buys</button>
+        <button type="button" onclick="readDonationsOnce(1)">Donations</button>
+        <button type="button" onclick="readOffersOnce(1)">Offers</button>
+        <button type="button" onclick="readProductsOnce(1)">Products</button>
+        <button type="button" onclick="quickAdd()">Add</button>
+        <p id="field1"></p>
+        <p id="field2"></p>
+        <p id="field3"></p>
+        <p id="field4"></p>
+        <p id="field5"></p>
+        <p id="field6"></p>
+        <p id="field7"></p>
+        <p id="field8"></p>
+        <hr>
+    </body>
+</html>
+

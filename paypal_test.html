@@ -1,0 +1,99 @@
+
+
+
+<button onclick="selectItem(bread)">bread</button>
+
+<button onclick="selectItem(pizza)">pizza</button>
+
+<br>
+
+<span>item name: </span> <span id="itemNamePlace"></span> <br>
+<span>item description: </span> <span id="itemDescriptionPlace"></span> <br>
+<span>item quantity: </span> <span id="itemQuantityPlace"></span> <br>
+<span>item price: </span> <span id="itemPricePlace"></span>
+<br><br>
+
+<div id="paypal-button"></div>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+// Constructor function for Item objects
+	function setItem(name, description, quantity, price) {
+		this.name = name;
+		this.description = description;
+		this.quantity = quantity;
+		this.price = price;
+	}
+
+	var bread = new setItem("bread", "sliced bread", '4', '2');
+	var  pizza = new setItem("pizza", "pepperoni", '1', '7');
+	
+	var myPrice;
+	var myDescription;
+	var myQuantity;
+	var myName;
+
+	function selectItem(item) {
+		myPrice = item.price;
+		myDescription  = item.description;
+		myQuantity = item.quantity;
+		myName = item.name;
+		
+		document.getElementById("itemNamePlace").innerHTML = myName;
+		document.getElementById("itemDescriptionPlace").innerHTML = myDescription;
+		document.getElementById("itemQuantityPlace").innerHTML = myQuantity;
+		document.getElementById("itemPricePlace").innerHTML = myPrice;
+	}
+	
+  paypal.Button.render({
+    // Configure environment
+    env: 'sandbox',
+    client: {
+      sandbox: 'AQSBpPexPERx7JJYxU6I94lPykOZEIRno0RRJasavPHEeVs1N9a-nTry0IOazN4u0ZJUaeew1xLFx9vw' //copy client id here
+      
+    },
+    // Customize button (optional)
+    locale: 'en_US',
+    style: {
+      size: 'small',
+      color: 'gold',
+      shape: 'pill',
+    },
+
+    // Enable Pay Now checkout flow (optional)
+    commit: true,
+
+      payment: function(data, actions) {
+            return actions.payment.create({
+                payment: {
+                    transactions: [
+                        {
+                            amount: { total: myPrice  * myQuantity, 
+											currency: 'USD' 
+										  },
+                            item_list: {
+							items: [
+							{
+							  name: myName,
+							  description: myDescription,
+							  quantity: myQuantity,
+							  price: myPrice,
+							  currency: 'USD'
+							}
+							],
+							
+						  }
+                        }
+                    ]
+                }
+            });
+        },
+    // Execute the payment
+    onAuthorize: function(data, actions) {
+      return actions.payment.execute().then(function() {
+        // Show a confirmation message to the buyer
+        window.alert('Thank you for your purchase!');
+      });
+    }
+  }, '#paypal-button');
+
+</script>

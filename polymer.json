@@ -1,0 +1,29 @@
+{
+  "npm": true,
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  },
+  "extraDependencies":[
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "images/**/*",
+    "education/*",
+    "resell/*",
+    "donating/*",
+    "recipes/*",
+    "recipes/**/*",
+    "resell/**/*",
+    "sw.js",
+    "dashboard.html",
+    "CreateAccount.html"
+  ],
+  "builds":[
+  {
+    "name":"es6prod",
+    "present": "es6-unbundled",
+    "addServiceWorker": false
+  }
+]
+}

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <script src="../node_modules/web-animations-js/web-animations-next.min.js"></script>
+    <script type="module">
+          import '@polymer/paper-button/paper-button.js';
+          import '@polymer/paper-input/paper-input.js';
+          import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+          import '@polymer/paper-item/paper-item.js';
+          import '@polymer/paper-listbox/paper-listbox.js';
+          import '@polymer/iron-form/iron-form.js';
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+
+    <script src="../config.js"></script>
+
+    <script>
+
+        function fieldchange(){
+            //Displays NGO number field
+            document.getElementById("ngofield").style.display = 'block';
+        }
+
+        function fieldchange2(){
+            //Hides NGO number field
+            document.getElementById("ngofield").style.display = 'none';
+        }
+
+        function newACC(){
+            var radios = document.getElementsByName("type")
+            var number=document.getElementById("ngonum").value;
+
+            for(var i = 0; i < radios.length; i++){
+                if (radios[i].checked) {
+                    /*  -- Commented by Kurt since always NGO was being submited to databse
+
+                    // checking which radio button is checked
+                    if(radios[i].value = "1"){
+                        rate_value = "NGO"
+                    }else if(radios[i].value = "2"){
+                        //number.hidden(true);
+                        rate_value = "Restaurant"
+                    }
+                    */
+
+                    if(i == 0) // HACK: hardcoded - if the first checkbox is checked it is an NGO
+                    {
+                        rate_value = "NGO"
+                    }
+                    else if (i == 1)    // if the second checkbox is checked it is a restaurant
+                    {
+                        rate_value = "Restaurant"
+                    }
+                    else if (i == 2)    // if the third checkbox is checked it is a supermarket 
+                    {
+                        rate_value = "Subermarket"
+                    }
+
+                    // only one radio can be logically checked, don't check the rest
+                    break;
+                }
+            }
+
+            var fullname=document.getElementById("name").value;
+            //var email=document.getElementById("email").value;
+            //var pswd=document.getElementById("pass").value;
+            var phone=document.getElementById("phone").value;
+            var ADD1=document.getElementById("ADD1").value;
+            var ADD2=document.getElementById("ADD2").value;
+            var city=document.getElementById("city").value;
+            var PC=document.getElementById("PC").value;
+
+            var uid = firebase.auth().currentUser.uid;
+
+            var commentsRef2 = firebase.database().ref('/UserIDS/' +uid +'/');
+
+            commentsRef2.set({
+                "type": rate_value
+            })
+            var flag = false;
+
+            commentsRef = firebase.database().ref('/Users/'+ rate_value + '/' + uid + '/UserInformation/')
+            commentsRef.set({
+
+                "Name of Institution" : fullname,
+                "Address Line 1": ADD1,
+                "Address Line 2": ADD2,
+                "City": city,
+                "Post Code": PC,
+                "Phone Number": phone,
+                "Type": rate_value,
+                "NGO Number": number
+
+            }).catch(function(err){
+
+                flag = true;
+                console.log(err);
+            });
+
+            //Once Submit button is clicked, Account information is put into the database
+            //and then the user is then sent to the main page
+
+            if(flag == false)       // HACK
+            {
+                var createAccount = document.getElementById('createAccount');
+                createAccount.style.visibility = "hidden";
+                if (createAccount.parentNode) {
+                    createAccount.parentNode.removeChild(createAccount);
+                }
+                document.getElementById('accountCreated').style.display = "block";
+            }
+        }
+    </script>
+
+    <title>Don't Waste Food</title>
+
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+    <link href='/main-css.css' rel='stylesheet'>
+
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script type="module" src="/src/pwatutorial-app/toolbar-drawer.js" crossorigin></script>
+    <script type="module" src="/src/pwatutorial-app/accordion.js" crossorigin></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <!-- <my-toolbar-drawer module="Donating"></my-toolbar-drawer> -->
+    <div id="content">
+
+        <div id="createAccount">
+
+            <h3>Create Account</h3>
+            <hr>
+            <form>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" onclick="fieldchange()" checked>
+                    <label class="form-check-label">
+                            NGO
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" onclick="fieldchange2()" checked>
+                    <label class="form-check-label">
+                        Restaurant
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" onclick="fieldchange2()" checked>
+                    <label class="form-check-label">
+                        Supermarket
+                    </label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="formName"> Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Restaurant or NGO or Supermarket name">
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress1"> Address Line 1</label>
+                    <input type="text" class="form-control" id="ADD1" placeholder="1234 Sunshine House">
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress2"> Address Line 2</label>
+                    <input type="text" class="form-control" id="ADD2" placeholder="Main St">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputCity">City</label>
+                        <input type="text" class="form-control" id="city">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputPostCode">Post Code</label>
+                        <input type="text" class="form-control" id="PC">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress2"> Phone Number</label>
+                    <input type="number" class="form-control" id="phone">
+                </div> 
+                <div id="ngofield" style="display:none">
+
+                    <label for="ngonum">NGO Number</label>
+                    <input type="text" id="ngonum" class="form-control">
+                    <br>
+                </div>
+            </form>
+
+            <button id="newaccBtn" class="customBtn" onclick="newACC()">Create</button>
+            <p>
+        </div>
+
+        <div id="accountCreated" style="display:none">
+            <br>
+            <h5 style="text-align:center">Account Created</h5>
+            <hr>
+            <div style="text-align:center">
+               <br><br>
+                <button class="customBtn" onclick="window.location.href = 'dashboard.html';">Go to dashboard</button>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

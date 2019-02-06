@@ -1,0 +1,30 @@
+{
+  "name": "pwatutorial",
+  "dependencies": {
+    "@fooloomanzoo/number-input": "^3.0.10",
+    "@material/drawer": "^0.41.1",
+    "@material/list": "^0.41.0",
+    "@material/textfield": "^0.41.0",
+    "@material/top-app-bar": "^0.41.0",
+    "@polymer/app-layout": "^3.0.1",
+    "@polymer/iron-form": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-checkbox": "^3.1.0",
+    "@polymer/paper-dropdown-menu": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.1",
+    "@polymer/paper-input": "^3.0.1",
+    "@polymer/paper-item": "^3.0.1",
+    "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-menu-button": "^3.0.1",
+    "@polymer/paper-toolbar": "^3.0.1",
+    "@polymer/polymer": "^3.0.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.5",
+    "web-animations-js": "^2.3.1"
+  },
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "wct-browser-legacy": "^1.0.0"
+  }
+}
